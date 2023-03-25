@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt")
 const bodyParser = require("body-parser")
 const cors = require("cors")
 const app = express()
+const { v4: uuidv4 } = require('uuid');
 app.use(bodyParser.json())
 
 const users = [];
@@ -48,7 +49,7 @@ app.post("/usuarios", async (req, res) => {
 
         //Agrega usuario a lista de usuarios
         const user = {
-            userId: users.length + 1,
+            userId: uuidv4(),
             username: username,
             password: passwordEncriptado,
             email: email
@@ -66,6 +67,18 @@ app.post("/usuarios", async (req, res) => {
         console.error(error)
         res.status(500).json({message: "Error al crear el usuario"})
     }
+})
+
+app.delete("/usuarios/:userId", (req, res) => {
+    let userId = req.params.userId
+    const index = users.findIndex(user => user.userId == userId)
+    
+    if(index === -1){
+        return res.status(404).json({message: "El usuario no existe"})
+    }
+    console.log("usuario eliminado")
+    users.splice(index,1)
+    res.json({message: "Usuario eliminado"})
 })
 
 app.post("/login", async (req, res) => {
