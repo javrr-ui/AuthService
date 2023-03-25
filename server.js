@@ -19,6 +19,13 @@ app.use(
     })
 )
 
+app.get("/usuarios", (req,res) => {
+    if (users.length === 0) {
+        return res.status(404).json({message: "No hay usuarios"})
+    }
+
+    res.json(users)
+})
 
 app.post("/usuarios", async (req, res) => {
     try {
@@ -27,6 +34,11 @@ app.post("/usuarios", async (req, res) => {
         const existeUsuario = users.find(user => user.username === username)
         if (existeUsuario){
             return res.status(409).json({message: "El usuario ya existe"})
+        }
+
+        const existeEmail = users.find(email => user.email === email)
+        if(existeEmail) {
+            return res.status(409).json({message: "El email ya está registrado"})
         }
 
 
