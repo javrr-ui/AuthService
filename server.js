@@ -36,7 +36,7 @@ app.post("/usuarios", async (req, res) => {
             return res.status(409).json({message: "El usuario ya existe"})
         }
 
-        const existeEmail = users.find(email => user.email === email)
+        const existeEmail = users.find(user => user.email === email)
         if(existeEmail) {
             return res.status(409).json({message: "El email ya está registrado"})
         }
